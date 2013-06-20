@@ -17,6 +17,10 @@ I particularily wanted to run this on Fedora which I couldn't find good
 instructions for and thus I've also added a section in here to document how I
 compiled this from source.
 
+As this project was originally dual licensed (GPL2+ or LGPL2.1+) I have chosen
+to continue the dual licensing under GPL3 and LGPL3 of which you can find
+copies in this repository.
+
 ### Samples
 
 Here are some samples of CutyCapt generated renderings:
