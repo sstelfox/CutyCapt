@@ -1,11 +1,11 @@
-== CutyCapt ==
+## CutyCapt
 
 CutyCapt is a small cross-platform command-line utility to capture WebKit's
 rendering of a web page into a variety of vector and bitmap formats, including
 SVG, PDF, PS, PNG, JPEG, TIFF, GIF, and BMP. See [IECapt][1] for a similar tool
 based on Internet Explorer.
 
-=== Note from Sam Stelfox ===
+### Note from Sam Stelfox
 
 I am not the original author of CutyCapt. This distinction is reserved for
 [Bjoern Hoehrmann][2], and [github][3].
@@ -17,7 +17,7 @@ I particularily wanted to run this on Fedora which I couldn't find good
 instructions for and thus I've also added a section in here to document how I
 compiled this from source.
 
-=== Samples ===
+### Samples
 
 Here are some samples of CutyCapt generated renderings:
 
@@ -26,23 +26,23 @@ Here are some samples of CutyCapt generated renderings:
 * [SVG Snapshot][8] of [http://silverlight.net][9]
 * [PDF Snapshot][10] of [http://silverlight.net][9]
 
-=== Status ===
+### Status
 
 CutyCapt has a number of known quirks, most of which are caused by problems
 with Qt and/or WebKit. For example, while plugin support can be enabled, and
 the plugins execute properly, their rendering cannot be captured on some
 platforms. Use of with caution.
 
-=== Requirements ===
+### Requirements
 
 CutyCapt depends on [Qt 4.4.0+][11].
 
-=== Download ===
+### Download
 
 A linux binary of this file will be made available for 64 bit platforms when I
 get compilation working.
 
-=== Usage ===
+### Usage
 
 Open a command prompt and ask for help:
 
@@ -79,7 +79,7 @@ Open a command prompt and ask for help:
 >  -----------------------------------------------------------------------------
 >  http://cutycapt.sf.net - (c) 2003-2010 Bjoern Hoehrmann - bjoern@hoehrmann.de
 
-=== Using CutyCapt without an X server ===
+### Using CutyCapt without an X server
 
 You cannot use CutyCapt without an X server, but you can use e.g. Xvfb as
 light-weight server if you are not running an interactive graphical desktop
@@ -89,7 +89,7 @@ environment. For example, you could use:
 $ xvfb-run --server-args="-screen 0, 1024x768x24" ./CutyCapt --url=http://www.example.org --out=example.png
 ```
 
-=== Compilation in Fedora ===
+### Compilation in Fedora
 
 ```
 yum install qt-devel qtwebkit-devel -y
