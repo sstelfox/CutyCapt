@@ -355,6 +355,7 @@ CaptHelp(void) {
     "  --zoom-factor=<float>          Page zoom factor (default: no zooming)       \n"
     "  --zoom-text-only=<on|off>      Whether to zoom only the text (default: off) \n"
     "  --http-proxy=<url>             Address for HTTP proxy server (default: none)\n"
+    "  --socks-proxy=<url>            Hostname of SOCKS5 proxy (default: none)     \n"
 #endif
 #if CUTYCAPT_SCRIPT
     "  --inject-script=<path>         JavaScript that will be injected into pages  \n"
@@ -536,6 +537,20 @@ main(int argc, char *argv[]) {
       QUrl p = QUrl::fromEncoded(value);
       QNetworkProxy proxy = QNetworkProxy(QNetworkProxy::HttpProxy,
         p.host(), p.port(80), p.userName(), p.password());
+      manager.setProxy(proxy);
+      page.setNetworkAccessManager(&manager);
+    } else if (strncmp("--socks-proxy", s, nlen) == 0) {
+      // This flag will override the http proxy one but allows the DNS lookup
+      // to also be performed from the perspective of the proxy. Useful for
+      // performing screenshots from another country.
+      QUrl p = QUrl::fromEncoded(value);
+      QNetworkProxy proxy;
+      proxy.setType(QNetworkProxy::Socks5Proxy);
+      proxy.setHostName(p.host());
+      proxy.setPort(p.port());
+      proxy.setCapabilities(QNetworkProxy::HostNameLookupCapability);
+      proxy.setUser(p.userName());
+      proxy.setPassword(p.password());
       manager.setProxy(proxy);
       page.setNetworkAccessManager(&manager);
 #endif
