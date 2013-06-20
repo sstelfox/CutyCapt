@@ -8,7 +8,7 @@ based on Internet Explorer.
 ### Note from Sam Stelfox
 
 I am not the original author of CutyCapt. This distinction is reserved for
-[Bjoern Hoehrmann][2], and [github][3].
+[Bjoern Hoehrmann][2] ([his Github account][3]).
 
 This fork introduces SOCKS5 proxy support as I had need of it for a particular
 project I was working on. This fork is the result of those efforts.
