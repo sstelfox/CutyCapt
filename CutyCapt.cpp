@@ -544,13 +544,9 @@ main(int argc, char *argv[]) {
       // to also be performed from the perspective of the proxy. Useful for
       // performing screenshots from another country.
       QUrl p = QUrl::fromEncoded(value);
-      QNetworkProxy proxy;
-      proxy.setType(QNetworkProxy::Socks5Proxy);
-      proxy.setHostName(p.host());
-      proxy.setPort(p.port());
+      QNetworkProxy proxy = QNetworkProxy(QNetworkProxy::Socks5Proxy,
+        p.host(), p.port(80), p.userName(), p.password());
       proxy.setCapabilities(QNetworkProxy::HostNameLookupCapability);
-      proxy.setUser(p.userName());
-      proxy.setPassword(p.password());
       manager.setProxy(proxy);
       page.setNetworkAccessManager(&manager);
 #endif
