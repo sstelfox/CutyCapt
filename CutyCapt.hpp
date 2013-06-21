@@ -1,3 +1,25 @@
+////////////////////////////////////////////////////////////////////
+//
+// CutyCapt - A Qt WebKit Web Page Rendering Capture Utility
+//
+// Copyright (C) 2003-2013 Bjoern Hoehrmann <bjoern@hoehrmann.de>
+// Modifications by Sam Stelfox <sstelfox@bedroomprogrammers.net> (2013)
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License version 3
+// as published by the Free Software Foundation.
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License version 3 as published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+////////////////////////////////////////////////////////////////////
+
 #include <QtWebKit>
 
 #if QT_VERSION >= 0x050000
@@ -19,8 +41,8 @@ public:
 protected:
   QString chooseFile(QWebFrame *frame, const QString& suggestedFile);
   void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
-  bool javaScriptPrompt(QWebFrame* frame, const QString& msg, const QString& defaultValue, QString* result);
-  void javaScriptAlert(QWebFrame* frame, const QString& msg);
+  bool javaScriptPrompt(QWebFrame*, const QString&, const QString&, QString*);
+  void javaScriptAlert(QWebFrame*, const QString& msg);
   bool javaScriptConfirm(QWebFrame* frame, const QString& msg);
   QString userAgentForUrl(const QUrl& url) const;
   QString mUserAgent;

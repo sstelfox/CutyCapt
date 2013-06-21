@@ -5,21 +5,17 @@
 // Copyright (C) 2003-2013 Bjoern Hoehrmann <bjoern@hoehrmann.de>
 //
 // This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
+// modify it under the terms of the GNU General Public License version 3
+// as published by the Free Software Foundation.
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// License version 3 as published by the Free Software Foundation.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// $Id$
 //
 ////////////////////////////////////////////////////////////////////
 
@@ -75,92 +71,77 @@ static struct _CutyExtMap {
   { CutyCapt::OtherFormat,       "",            ""      }
 };
 
-QString
-CutyPage::chooseFile(QWebFrame* /*frame*/, const QString& /*suggestedFile*/) {
+// Params are frame, suggestedFile
+QString CutyPage::chooseFile(QWebFrame*, const QString&) {
   return QString::null;
 }
 
-bool
-CutyPage::javaScriptConfirm(QWebFrame* /*frame*/, const QString& /*msg*/) {
+// Params are frame, msg
+bool CutyPage::javaScriptConfirm(QWebFrame*, const QString&) {
   return true;
 }
 
-bool
-CutyPage::javaScriptPrompt(QWebFrame* /*frame*/,
-                           const QString& /*msg*/,
-                           const QString& /*defaultValue*/,
-                           QString* /*result*/) {
+// Params are frame, msg, defaultValue, result
+bool CutyPage::javaScriptPrompt(QWebFrame*, const QString&, const QString&, QString*) {
   return true;
 }
 
-void
-CutyPage::javaScriptConsoleMessage(const QString& /*message*/,
-                                   int /*lineNumber*/,
-                                   const QString& /*sourceID*/) {
-  // noop
+// Params are message, lineNumber, and sourceID
+void CutyPage::javaScriptConsoleMessage(const QString&, int, const QString&) {
+  // NOOP
 }
 
-void
-CutyPage::javaScriptAlert(QWebFrame* /*frame*/, const QString& msg) {
-
-  if (mPrintAlerts)
+// First param is 'frame'
+void CutyPage::javaScriptAlert(QWebFrame*, const QString& msg) {
+  if (mPrintAlerts) {
     qDebug() << "[alert]" << msg;
+  }
 
   if (mAlertString == msg) {
     QTimer::singleShot(10, mCutyCapt, SLOT(Delayed()));
   }
 }
 
-QString
-CutyPage::userAgentForUrl(const QUrl& url) const {
-
-  if (!mUserAgent.isNull())
+QString CutyPage::userAgentForUrl(const QUrl& url) const {
+  if (!mUserAgent.isNull()) {
     return mUserAgent;
+  }
 
   return QWebPage::userAgentForUrl(url);
 }
 
-void
-CutyPage::setUserAgent(const QString& userAgent) {
+void CutyPage::setUserAgent(const QString& userAgent) {
   mUserAgent = userAgent;
 }
 
-void
-CutyPage::setAlertString(const QString& alertString) {
+void CutyPage::setAlertString(const QString& alertString) {
   mAlertString = alertString;
 }
 
-QString
-CutyPage::getAlertString() {
+QString CutyPage::getAlertString() {
   return mAlertString;
 }
 
-void
-CutyPage::setCutyCapt(CutyCapt* cutyCapt) {
+void CutyPage::setCutyCapt(CutyCapt* cutyCapt) {
   mCutyCapt = cutyCapt;
 }
 
-void
-CutyPage::setPrintAlerts(bool printAlerts) {
+void CutyPage::setPrintAlerts(bool printAlerts) {
   mPrintAlerts = printAlerts;
 }
 
-void
-CutyPage::setAttribute(QWebSettings::WebAttribute option,
-                       const QString& value) {
-
-  if (value == "on")
+void CutyPage::setAttribute(QWebSettings::WebAttribute option, const QString& value) {
+  if (value == "on") {
     settings()->setAttribute(option, true);
-  else if (value == "off")
+  } else if (value == "off") {
     settings()->setAttribute(option, false);
-  else
-    (void)0; // TODO: ...
+  } else {
+    (void) 0; // TODO: ...
+  }
 }
 
 // TODO: Consider merging some of main() and CutyCap
-
-CutyCapt::CutyCapt(CutyPage* page, const QString& output, int delay, OutputFormat format,
-                   const QString& scriptProp, const QString& scriptCode, bool insecure) {
+CutyCapt::CutyCapt(CutyPage* page, const QString& output, int delay, OutputFormat format, const QString& scriptProp, const QString& scriptCode, bool insecure) {
   mPage = page;
   mOutput = output;
   mDelay = delay;
@@ -177,25 +158,24 @@ CutyCapt::CutyCapt(CutyPage* page, const QString& output, int delay, OutputForma
   mPage->setCutyCapt(this);
 }
 
-void
-CutyCapt::InitialLayoutCompleted() {
+void CutyCapt::InitialLayoutCompleted() {
   mSawInitialLayout = true;
 
-  if (mSawInitialLayout && mSawDocumentComplete)
+  if (mSawInitialLayout && mSawDocumentComplete) {
     TryDelayedRender();
+  }
 }
 
-void
-CutyCapt::DocumentComplete(bool /*ok*/) {
+// Params are 'ok'
+void CutyCapt::DocumentComplete(bool) {
   mSawDocumentComplete = true;
 
-  if (mSawInitialLayout && mSawDocumentComplete)
+  if (mSawInitialLayout && mSawDocumentComplete) {
     TryDelayedRender();
+  }
 }
 
-void
-CutyCapt::JavaScriptWindowObjectCleared() {
-
+void CutyCapt::JavaScriptWindowObjectCleared() {
   if (!mScriptProp.isEmpty()) {
     QVariant var = mPage->mainFrame()->evaluateJavaScript(mScriptProp);
     QObject* obj = var.value<QObject*>();
@@ -207,12 +187,9 @@ CutyCapt::JavaScriptWindowObjectCleared() {
   }
 
   mPage->mainFrame()->evaluateJavaScript(mScriptCode);
-
 }
 
-void
-CutyCapt::TryDelayedRender() {
-
+void CutyCapt::TryDelayedRender() {
   if (!mPage->getAlertString().isEmpty())
     return;
 
@@ -225,20 +202,18 @@ CutyCapt::TryDelayedRender() {
   QApplication::exit();
 }
 
-void
-CutyCapt::Timeout() {
+void CutyCapt::Timeout() {
   saveSnapshot();
   QApplication::exit();
 }
 
-void
-CutyCapt::Delayed() {
+void CutyCapt::Delayed() {
   saveSnapshot();
   QApplication::exit();
 }
 
-void
-CutyCapt::handleSslErrors(QNetworkReply* reply, QList<QSslError> errors) {
+// Second param is errors
+void CutyCapt::handleSslErrors(QNetworkReply* reply, QList<QSslError>) {
   if (mInsecure) {
     reply->ignoreSslErrors();
   } else {
@@ -246,24 +221,23 @@ CutyCapt::handleSslErrors(QNetworkReply* reply, QList<QSslError> errors) {
   }
 }
 
-void
-CutyCapt::saveSnapshot() {
+void CutyCapt::saveSnapshot() {
   QWebFrame *mainFrame = mPage->mainFrame();
   QPainter painter;
   const char* format = NULL;
 
-  for (int ix = 0; CutyExtMap[ix].id != OtherFormat; ++ix)
-    if (CutyExtMap[ix].id == mFormat)
-      format = CutyExtMap[ix].identifier; //, break;
+  for (int ix = 0; CutyExtMap[ix].id != OtherFormat; ++ix) {
+    if (CutyExtMap[ix].id == mFormat) {
+      format = CutyExtMap[ix].identifier;
+    }
+  }
 
-  // TODO: sometimes contents/viewport can have size 0x0
-  // in which case saving them will fail. This is likely
-  // the result of the method being called too early. So
-  // far I've been unable to find a workaround, except
-  // using --delay with some substantial wait time. I've
-  // tried to resize multiple time, make a fake render,
-  // check for other events... This is primarily a problem
-  // under my Ubuntu virtual machine.
+  // TODO: sometimes contents/viewport can have size 0x0 in which case saving
+  // them will fail. This is likely the result of the method being called too
+  // early. So far I've been unable to find a workaround, except using --delay
+  // with some substantial wait time. I've tried to resize multiple time, make
+  // a fake render, check for other events... This is primarily a problem under
+  // my Ubuntu virtual machine.
 
   mPage->setViewportSize( mainFrame->contentsSize() );
 
@@ -302,9 +276,7 @@ CutyCapt::saveSnapshot() {
       file.open(QIODevice::WriteOnly | QIODevice::Text);
       QTextStream s(&file);
       s.setCodec("utf-8");
-      s << (mFormat == InnerTextFormat  ? mainFrame->toPlainText() :
-            mFormat == HtmlFormat       ? mainFrame->toHtml() :
-            "bug");
+      s << (mFormat == InnerTextFormat ? mainFrame->toPlainText() : (mFormat == HtmlFormat ? mainFrame->toHtml() : "bug"));
       break;
     }
     default: {
