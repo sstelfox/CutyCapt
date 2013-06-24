@@ -133,6 +133,16 @@ Currently I'm getting the following error when I try to compile (unrelated to my
 > CutyCapt.cpp:319:1: error: expected declaration before ‘}’ token
 > make: *** [CutyCapt.o] Error 1
 
+Take 2!
+
+```
+yum install perl-version libxcb libxcb-devel xcb-util xcb-util-devel flex bison gperf libicu-devel libxslt-devel ruby
+git clone git://gitorious.org/qt/qt5.git qt5
+cd qt5
+git checkout stable
+./init-repository
+```
+
 [1]: http://iecapt.sourceforge.net/
 [2]: mailto:bjoern@hoehrmann.de
 [3]: https://github.com/hoehrmann
